@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriSense AI™ | Precision Agronomy & Regional Crop Intelligence</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --surface: #121820;
+      --surface-elevated: #1a222d;
+      --surface-card: #151d27;
+      --border: #232e3d;
+      --border-focus: #38bdf8;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --accent: #0ea5e9;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    header {
+      background: rgba(18, 24, 32, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+    }
+
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #fff;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .nav-stats {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+    }
+
+    .stat-badge i {
+      color: var(--primary);
+    }
+
+    .stat-badge strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .btn-gps {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(14, 165, 233, 0.15));
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      padding: 0.45rem 0.95rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-gps:hover {
+      background: rgba(16, 185, 129, 0.25);
+      border-color: #34d399;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .main-container {
+      max-width: 1360px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .top-telemetry-banner {
+      background: linear-gradient(90deg, #131d28 0%, #152230 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .telemetry-location {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .telemetry-location-dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--primary);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .location-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .telemetry-readings {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .telemetry-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .telemetry-pill i {
+      color: var(--accent);
+    }
+
+    .telemetry-pill strong {
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .district-intel-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .district-intel-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #10b981, #0ea5e9, #f59e0b);
+    }
+
+    .intel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .intel-title {
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #fff;
+    }
+
+    .intel-title i {
+      color: #f59e0b;
+    }
+
+    .btn-benchmark {
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(14, 165, 233, 0.35);
+      color: #38bdf8;
+      padding: 0.45rem 0.95rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-benchmark:hover {
+      background: rgba(14, 165, 233, 0.22);
+      border-color: #38bdf8;
+    }
+
+    .district-crops-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .crop-chip {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+
+    .crop-chip.recommended-family {
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .crop-chip-name {
+      font-weight: 600;
+    }
+
+    .crop-chip-metric {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    .district-soil-strip {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 0.75rem;
+    }
+
+    .soil-metric-item strong {
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 1.15fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: #fff;
+    }
+
+    .card-title i {
+      color: var(--primary);
+    }
+
+    .card-body {
+      padding: 1.4rem;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    label span.hint {
+      font-weight: 400;
+      color: var(--text-dim);
+      font-size: 0.74rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    select, input[type="number"], input[type="text"] {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    }
+
+    .unit-badge {
+      position: absolute;
+      right: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      pointer-events: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.9rem 1.5rem;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      margin-top: 1.5rem;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Results Dashboard Elements */
+    .results-hero-card {
+      background: linear-gradient(145deg, #13221e 0%, #151d27 100%);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .hero-crop-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .hero-crop-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #34d399;
+    }
+
+    .hero-crop-name {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-crop-category {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .hero-confidence-badge {
+      text-align: right;
+    }
+
+    .confidence-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #34d399;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .confidence-label {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .regional-status-banner {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .regional-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    .yield-forecast-pill {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      padding: 0.35rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .crop-attributes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 600px) {
+      .crop-attributes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .attr-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+
+    .attr-label {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .attr-val {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .radar-container {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-box {
+      position: relative;
+      height: 240px;
+      width: 100%;
+    }
+
+    .advisory-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .advisory-item {
+      display: flex;
+      gap: 0.85rem;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .advisory-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .advisory-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .advisory-icon.Deficient {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    .advisory-icon.Optimal {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+
+    .advisory-icon.Excess {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+    }
+
+    .advisory-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .advisory-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .alt-crops-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .alt-crop-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+    }
+
+    .alt-crop-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .alt-rank {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+    }
+
+    .alt-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .alt-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .alt-bar-wrap {
+      width: 120px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .alt-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .alt-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 9999px;
+    }
+
+    .alt-pct {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      width: 38px;
+      text-align: right;
+    }
+
+    .empty-state-card {
+      background: var(--surface-card);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      font-size: 2.8rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+
+    .empty-state-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      max-width: 440px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .feature-highlights {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+      text-align: left;
+      margin-top: 1rem;
+    }
+
+    .feature-item {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+
+    .feature-item-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .feature-item-title i {
+      color: var(--primary);
+    }
+
+    .feature-item-desc {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header>
+    <div class="nav-inner">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <i class="fa-solid fa-seedling"></i>
+        </div>
+        <div>
+          <div class="brand-title">AgriSense AI™</div>
+          <div class="brand-subtitle">Precision Agronomy & Regional Crop Intelligence</div>
+        </div>
+      </div>
+
+      <div class="nav-stats">
+        <div class="stat-badge">
+          <i class="fa-solid fa-database"></i>
+          <span><strong>81,329</strong> Ministry Records</span>
+        </div>
+        <div class="stat-badge">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span><strong>28 States & 5 UTs</strong> / <strong>652</strong> Districts</span>
+        </div>
+        <div class="stat-badge">
+          <i class="fa-solid fa-bullseye"></i>
+          <span><strong>99.77%</strong> ML Accuracy</span>
+        </div>
+        <button class="btn-gps" onclick="detectGPSLocation()">
+          <i class="fa-solid fa-location-crosshairs"></i>
+          <span>Auto-Detect Farm (GPS)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+
+    <!-- Live Telemetry Status Banner -->
+    <div class="top-telemetry-banner">
+      <div class="telemetry-location">
+        <div class="telemetry-location-dot"></div>
+        <div>
+          <div class="location-name" id="displayLocationName">
+            {{ default_district }}, {{ default_state }}
+          </div>
+          <div style="font-size: 0.74rem; color: var(--text-dim);" id="telemetryStatusText">
+            Connected to Open-Meteo Precision Weather Station
+          </div>
+        </div>
+      </div>
+
+      <div class="telemetry-readings">
+        <div class="telemetry-pill">
+          <i class="fa-solid fa-temperature-half"></i>
+          <span>Temp: <strong id="telemetryTemp">--</strong>°C</span>
+        </div>
+        <div class="telemetry-pill">
+          <i class="fa-solid fa-droplet"></i>
+          <span>Humidity: <strong id="telemetryHum">--</strong>%</span>
+        </div>
+        <div class="telemetry-pill">
+          <i class="fa-solid fa-cloud-rain"></i>
+          <span>Rainfall: <strong id="telemetryRain">0.0</strong> mm</span>
+        </div>
+        <button class="btn-benchmark" onclick="syncWeatherToInputs()" style="padding: 0.35rem 0.75rem;">
+          <i class="fa-solid fa-arrows-rotate"></i> Sync Weather
+        </button>
+      </div>
+    </div>
+
+    <!-- District Historical Agricultural Intelligence Card -->
+    <div class="district-intel-card">
+      <div class="intel-header">
+        <div class="intel-title">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Historically Cultivated Crops in <span id="intelDistrictTitle">{{ default_district }}</span> (<span id="intelStateTitle">{{ default_state }}</span>)</span>
+        </div>
+        <div class="intel-actions">
+          <button class="btn-benchmark" onclick="fillDistrictSoilBenchmark()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Fill District Soil Benchmark</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Crop Chips Flow -->
+      <div class="district-crops-flow" id="districtCropsList">
+        <div class="crop-chip recommended-family">
+          <span class="crop-chip-name">Bajra</span>
+          <span class="crop-chip-metric">20 yrs • 1.88 t/ha</span>
+        </div>
+        <div class="crop-chip recommended-family">
+          <span class="crop-chip-name">Rice</span>
+          <span class="crop-chip-metric">20 yrs • 2.54 t/ha</span>
+        </div>
+        <div class="crop-chip recommended-family">
+          <span class="crop-chip-name">Moong(Green Gram)</span>
+          <span class="crop-chip-metric">13 yrs • 0.50 t/ha</span>
+        </div>
+        <div class="crop-chip">
+          <span class="crop-chip-name">Tobacco</span>
+          <span class="crop-chip-metric">13 yrs • 1.96 t/ha</span>
+        </div>
+        <div class="crop-chip">
+          <span class="crop-chip-name">Groundnut</span>
+          <span class="crop-chip-metric">11 yrs • 1.71 t/ha</span>
+        </div>
+        <div class="crop-chip recommended-family">
+          <span class="crop-chip-name">Cotton</span>
+          <span class="crop-chip-metric">10 yrs • 1.37 t/ha</span>
+        </div>
+      </div>
+
+      <!-- Soil Health Card Regional Strip -->
+      <div class="district-soil-strip" id="districtSoilStrip">
+        <div class="soil-metric-item">
+          <span>Soil Type: </span><strong id="stripSoilType">Alluvial Sandy-Loam / Medium Black</strong>
+        </div>
+        <div class="soil-metric-item">
+          <span>Typical N: </span><strong id="stripN">195</strong> kg/ha
+        </div>
+        <div class="soil-metric-item">
+          <span>Typical P: </span><strong id="stripP">26</strong> kg/ha
+        </div>
+        <div class="soil-metric-item">
+          <span>Typical K: </span><strong id="stripK">285</strong> kg/ha
+        </div>
+        <div class="soil-metric-item">
+          <span>Typical pH: </span><strong id="stripPH">7.5</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Two-Column Dashboard -->
+    <div class="dashboard-layout">
+
+      <!-- LEFT COLUMN: Farmer Input Form -->
+      <div>
+        <form action="/predict" method="POST" id="agriForm" onsubmit="handleFormSubmit(event)">
+
+          <!-- Section 1: Geographic & Seasonal Context -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-map"></i>
+                <span>1. Geographic & Farm Specifications</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="stateSelect">State / Union Territory</label>
+                  <select id="stateSelect" name="state" onchange="onStateChange()">
+                    {% for st in states %}
+                      <option value="{{ st }}" {% if st == default_state %}selected{% endif %}>{{ st }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="districtSelect">District</label>
+                  <select id="districtSelect" name="district" onchange="onDistrictChange()">
+                    {% for dist in districts %}
+                      <option value="{{ dist }}" {% if dist == default_district %}selected{% endif %}>{{ dist }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="seasonSelect">Sowing Season</label>
+                  <select id="seasonSelect" name="season">
+                    <option value="Kharif" {% if season == 'Kharif' %}selected{% endif %}>Kharif (Monsoon / Autumn)</option>
+                    <option value="Rabi" {% if season == 'Rabi' %}selected{% endif %}>Rabi (Winter / Spring)</option>
+                    <option value="Summer" {% if season == 'Summer' %}selected{% endif %}>Summer / Zaid</option>
+                    <option value="Whole Year" {% if season == 'Whole Year' %}selected{% endif %}>Whole Year / Perennial</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="farmAreaInput">Cultivation Area <span class="hint">(Hectares)</span></label>
+                  <div class="input-wrapper">
+                    <input type="number" id="farmAreaInput" name="farm_area" step="0.5" min="0.1" max="1000" value="{{ farm_area if farm_area else 2.0 }}">
+                    <span class="unit-badge">ha</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Soil Chemistry Parameters -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-vial"></i>
+                <span>2. Soil Nutrients (from Soil Health Card or Lab)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="inputN">Nitrogen (N) <span class="hint">(Available N)</span></label>
+                  <div class="input-wrapper">
+                    <input type="number" id="inputN" name="Nitrogen" step="1" min="0" max="300" value="{{ form_data.N if form_data else 195 }}" required>
+                    <span class="unit-badge">kg/ha</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputP">Phosphorus (P) <span class="hint">(Available P2O5)</span></label>
+                  <div class="input-wrapper">
+                    <input type="number" id="inputP" name="Phosphorus" step="1" min="0" max="150" value="{{ form_data.P if form_data else 26 }}" required>
+                    <span class="unit-badge">kg/ha</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="inputK">Potassium (K) <span class="hint">(Available K2O)</span></label>
+                  <div class="input-wrapper">
+                    <input type="number" id="inputK" name="Potassium" step="1" min="0" max="400" value="{{ form_data.K if form_data else 285 }}" required>
+                    <span class="unit-badge">kg/ha</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPH">Soil pH Level <span class="hint">(Acidity / Alkalinity)</span></label>
+                  <div class="input-wrapper">
+                    <input type="number" id="inputPH" name="pH" step="0.1" min="3.0" max="10.0" value="{{ form_data.ph if form_data else 7.5 }}" required>
+                    <span class="unit-badge">pH</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Agro-Climatic Parameters -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-cloud-sun"></i>
+                <span>3. Agro-Climatic Readings (Auto-Synced from Stations)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="inputTemp">Ambient Temperature</label>
+                  <div class="input-wrapper">
+                    <input type="number" id="inputTemp" name="Temperature" step="0.1" min="0" max="55" value="{{ form_data.temperature if form_data else 28.0 }}" required>
+                    <span class="unit-badge">°C</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputHum">Relative Humidity</label>
+                  <div class="input-wrapper">
+                    <input type="number" id="inputHum" name="Humidity" step="0.1" min="5" max="100" value="{{ form_data.humidity if form_data else 65.0 }}" required>
+                    <span class="unit-badge">%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                  <label for="inputRain" style="margin-bottom: 0;">Crop Water Availability / Seasonal Rainfall <span class="hint">(mm)</span></label>
+                  <span style="font-size: 0.72rem; color: var(--text-dim);">Presets:</span>
+                </div>
+                <div class="input-wrapper">
+                  <input type="number" id="inputRain" name="Rainfall" step="0.1" min="0" max="5000" value="{{ form_data.rainfall if form_data else 85.0 }}" required>
+                  <span class="unit-badge">mm</span>
+                </div>
+                <!-- Quick Water Preset Pills -->
+                <div style="display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                  <button type="button" class="btn-benchmark" style="font-size: 0.72rem; padding: 0.2rem 0.5rem;" onclick="setWaterPreset(25)">
+                    🌵 Dry / Melons (25 mm)
+                  </button>
+                  <button type="button" class="btn-benchmark" style="font-size: 0.72rem; padding: 0.2rem 0.5rem;" onclick="setWaterPreset(75)">
+                    🌱 Moderate / Pulses (75 mm)
+                  </button>
+                  <button type="button" class="btn-benchmark" style="font-size: 0.72rem; padding: 0.2rem 0.5rem;" onclick="setWaterPreset(110)">
+                    🌾 Good / Cotton & Maize (110 mm)
+                  </button>
+                  <button type="button" class="btn-benchmark" style="font-size: 0.72rem; padding: 0.2rem 0.5rem;" onclick="setWaterPreset(200)">
+                    🌧️ Monsoon / Rice (200 mm)
+                  </button>
+                </div>
+                <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.4rem; line-height: 1.4;">
+                  <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> <strong>Agronomic Guide:</strong> The ML model evaluates <em>seasonal crop water requirement</em>. Today's live rain reading (0.0 mm) shows today's dry weather. For normal field crops, provide seasonal water (75–200 mm).
+                </div>
+              </div>
+
+              <button type="submit" class="btn-submit" id="submitBtn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Run Precision Agronomic Recommendation</span>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+
+      <!-- RIGHT COLUMN: Output Dashboard -->
+      <div id="resultsDashboardColumn">
+
+        {% if output %}
+          <!-- Jinja Rendered Results -->
+          <div class="results-hero-card">
+            <div class="hero-top">
+              <div class="hero-crop-meta">
+                <div class="hero-crop-icon">
+                  <i class="fa-solid fa-wheat-awn"></i>
+                </div>
+                <div>
+                  <div class="hero-crop-name">{{ output.primary_crop }}</div>
+                  <div class="hero-crop-category">{{ output.advisory.agronomy.category }} • {{ output.advisory.agronomy.duration }}</div>
+                </div>
+              </div>
+
+              <div class="hero-confidence-badge">
+                <div class="confidence-number">{{ "%.1f"|format(output.primary_confidence) }}%</div>
+                <div class="confidence-label">Suitability Match</div>
+              </div>
+            </div>
+
+            <!-- Regional Intelligence Fit & Forecast -->
+            <div class="regional-status-banner">
+              <div class="regional-badge">
+                {% if output.regional_context.is_primary_traditional %}
+                  <i class="fa-solid fa-circle-check" style="color: #34d399;"></i>
+                  <span>Historically Cultivated Staple in {{ output.regional_context.district }}</span>
+                {% else %}
+                  <i class="fa-solid fa-lightbulb" style="color: #38bdf8;"></i>
+                  <span>High Agronomic Match for {{ output.regional_context.district }} Soil</span>
+                {% endif %}
+              </div>
+
+              {% if output.regional_context.primary_predicted_yield %}
+                <div class="yield-forecast-pill">
+                  🌾 Est. Yield: {{ output.regional_context.primary_predicted_yield }} t/ha 
+                  {% if output.regional_context.primary_total_est_production %}
+                    ({{ output.regional_context.primary_total_est_production }} t total)
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Crop Quick Attributes -->
+            <div class="crop-attributes-grid">
+              <div class="attr-card">
+                <div class="attr-label">Primary Season</div>
+                <div class="attr-val">{{ output.advisory.agronomy.season }}</div>
+              </div>
+              <div class="attr-card">
+                <div class="attr-label">Water Footprint</div>
+                <div class="attr-val">{{ output.advisory.agronomy.water_need }}</div>
+              </div>
+              <div class="attr-card">
+                <div class="attr-label">Target pH Buffer</div>
+                <div class="attr-val">{{ output.advisory.ph_status }}</div>
+              </div>
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.85rem;">
+              {{ output.advisory.agronomy.description }}
+            </div>
+          </div>
+
+          <!-- Soil Nutrient Radar Chart -->
+          <div class="radar-container">
+            <div class="card-title" style="margin-bottom: 1rem;">
+              <i class="fa-solid fa-chart-radar"></i>
+              <span>Soil Nutrient Match vs Ideal Agronomic Requirements</span>
+            </div>
+            <div class="chart-box">
+              <canvas id="soilRadarCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Chemical Fertilizer Advisory -->
+          <div class="advisory-card">
+            <div class="card-title" style="margin-bottom: 1rem;">
+              <i class="fa-solid fa-prescription-bottle-medical"></i>
+              <span>Commercial Fertilizer & Soil Conditioning Advisory (ICAR)</span>
+            </div>
+
+            {% for rec in output.advisory.recommendations %}
+              <div class="advisory-item">
+                <div class="advisory-icon {{ rec.status }}">
+                  {% if rec.status == 'Optimal' %}
+                    <i class="fa-solid fa-check"></i>
+                  {% elif rec.status == 'Deficient' %}
+                    <i class="fa-solid fa-arrow-up"></i>
+                  {% else %}
+                    <i class="fa-solid fa-arrow-down"></i>
+                  {% endif %}
+                </div>
+                <div>
+                  <div class="advisory-title">
+                    <span>{{ rec.nutrient }}</span>
+                    <span style="font-size: 0.74rem; font-family: 'JetBrains Mono', monospace; color: var(--text-dim);">[{{ rec.gap }}]</span>
+                  </div>
+                  <div class="advisory-desc">{{ rec.action }}</div>
+                </div>
+              </div>
+            {% endfor %}
+
+            <div class="advisory-item">
+              <div class="advisory-icon Optimal">
+                <i class="fa-solid fa-droplet-slash"></i>
+              </div>
+              <div>
+                <div class="advisory-title">Soil Acidity / Alkalinity Conditioning</div>
+                <div class="advisory-desc">{{ output.advisory.ph_advice }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ranked Alternatives -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <i class="fa-solid fa-ranking-star"></i>
+                <span>Alternative Viable Crops for Your Soil</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="alt-crops-list">
+                {% for pred in output.top_predictions %}
+                  <div class="alt-crop-row">
+                    <div class="alt-crop-left">
+                      <span class="alt-rank">#{{ pred.rank }}</span>
+                      <div>
+                        <div class="alt-name">{{ pred.crop }}</div>
+                        <div class="alt-meta">
+                          {{ pred.category }} • {{ pred.water_need }}
+                          {% if pred.is_traditional_in_district %}
+                            • <span style="color: #38bdf8;">District Staple</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="alt-bar-wrap">
+                      <div class="alt-bar-bg">
+                        <div class="alt-bar-fill" style="width: {{ pred.confidence }}%;"></div>
+                      </div>
+                      <div class="alt-pct">{{ "%.1f"|format(pred.confidence) }}%</div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+        {% else %}
+
+          <!-- Initial State Placeholder -->
+          <div class="empty-state-card" id="initialEmptyCard">
+            <div class="empty-state-icon">
+              <i class="fa-solid fa-satellite-dish"></i>
+            </div>
+            <div class="empty-state-title">Precision Agronomic Intelligence Ready</div>
+            <div class="empty-state-desc">
+              Select your Indian State & District, sync live weather station telemetry, or enter your Soil Health Card test values to generate calibrated recommendations.
+            </div>
+
+            <div class="feature-highlights">
+              <div class="feature-item">
+                <div class="feature-item-title">
+                  <i class="fa-solid fa-database"></i>
+                  <span>81,329 DES Records</span>
+                </div>
+                <div class="feature-item-desc">Trained on real Indian Ministry of Agriculture production archives.</div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-item-title">
+                  <i class="fa-solid fa-calculator"></i>
+                  <span>District Yield Predictor</span>
+                </div>
+                <div class="feature-item-desc">Estimates harvest tonnage per hectare for your specific district.</div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-item-title">
+                  <i class="fa-solid fa-shield-halved"></i>
+                  <span>Zero Synthetic Data</span>
+                </div>
+                <div class="feature-item-desc">Strictly authentic ICAR agronomy field trials and IMD climate records.</div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-item-title">
+                  <i class="fa-solid fa-chart-line"></i>
+                  <span>Fertilizer Dosages</span>
+                </div>
+                <div class="feature-item-desc">Computes exact commercial Urea, DAP, and MOP kg/ha requirements.</div>
+              </div>
+            </div>
+          </div>
+
+        {% endif %}
+
+        <!-- Dynamic Results Container (Populated via JS on AJAX submit) -->
+        <div id="activeResultsContainer" style="display: none;"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    AgriSense AI™ Enterprise Agronomy System • 81,329 Ministry of Agriculture Records • 100% Real Authentic Data
+  </footer>
+
+  <!-- Script for Radar Chart when rendered via Jinja -->
+  {% if output %}
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const radarCanvas = document.getElementById('soilRadarCanvas');
+      if (!radarCanvas) return;
+
+      const userN = {{ form_data.N }};
+      const userP = {{ form_data.P }};
+      const userK = {{ form_data.K }};
+      const userPH = {{ form_data.ph }} * 10;
+
+      const idealN = {{ output.advisory.ideal_npk[0] }};
+      const idealP = {{ output.advisory.ideal_npk[1] }};
+      const idealK = {{ output.advisory.ideal_npk[2] }};
+      const idealPH = 70;
+
+      new Chart(radarCanvas, {
+        type: 'radar',
+        data: {
+          labels: ['Nitrogen (kg/ha)', 'Phosphorus (kg/ha)', 'Potassium (kg/ha)', 'Soil pH (scaled x10)'],
+          datasets: [
+            {
+              label: 'Your Current Soil Test',
+              data: [userN, userP, userK, userPH],
+              borderColor: '#0ea5e9',
+              backgroundColor: 'rgba(14, 165, 233, 0.25)',
+              borderWidth: 2,
+              pointBackgroundColor: '#0ea5e9'
+            },
+            {
+              label: 'Ideal for {{ output.primary_crop }}',
+              data: [idealN, idealP, idealK, idealPH],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              borderWidth: 2,
+              pointBackgroundColor: '#10b981'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+              grid: { color: 'rgba(255, 255, 255, 0.08)' },
+              pointLabels: {
+                color: '#94a3b8',
+                font: { size: 11, weight: '600' }
+              },
+              ticks: { display: false }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: { color: '#f8fafc', font: { size: 12, weight: '600' } }
+            }
+          }
+        }
+      });
+    });
+  </script>
+  {% endif %}
+
+  <!-- Core Interactive Script -->
+  <script>
+    let DISTRICT_REGIONS = {};
+    let CURRENT_DISTRICT_INTEL = {};
+    let radarChartInstance = null;
+
+    async function loadRegions() {
+      try {
+        const resp = await fetch('/api/regions');
+        const data = await resp.json();
+        if (data.status === 'success') {
+          DISTRICT_REGIONS = data.districts_by_state;
+        }
+      } catch (err) {
+        console.error("Could not load regions:", err);
+      }
+    }
+
+    function onStateChange() {
+      const state = document.getElementById('stateSelect').value;
+      const districtSelect = document.getElementById('districtSelect');
+      const dists = DISTRICT_REGIONS[state] || [];
+      
+      districtSelect.innerHTML = '';
+      dists.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        districtSelect.appendChild(opt);
+      });
+
+      if (dists.length > 0) {
+        onDistrictChange();
+      }
+    }
+
+    async function onDistrictChange(fetchWeather = true) {
+      const state = document.getElementById('stateSelect').value;
+      const district = document.getElementById('districtSelect').value;
+      if (!district) return;
+      
+      document.getElementById('displayLocationName').textContent = `${district}, ${state}`;
+      document.getElementById('intelDistrictTitle').textContent = district;
+      document.getElementById('intelStateTitle').textContent = state;
+
+      try {
+        const resp = await fetch(`/api/district_intel?state=${encodeURIComponent(state)}&district=${encodeURIComponent(district)}`);
+        const json = await resp.json();
+        if (json.status === 'success' && json.data) {
+          CURRENT_DISTRICT_INTEL = json.data;
+          renderDistrictIntel(json.data);
+        }
+      } catch (err) {
+        console.error("Could not fetch district intel:", err);
+      }
+
+      if (fetchWeather) {
+        fetchWeatherForDistrict();
+      }
+    }
+
+    function renderDistrictIntel(data) {
+      const flow = document.getElementById('districtCropsList');
+      flow.innerHTML = '';
+
+      if (data.top_crops && data.top_crops.length > 0) {
+        data.top_crops.slice(0, 8).forEach(c => {
+          const chip = document.createElement('div');
+          chip.className = `crop-chip ${c.is_recommendation_crop ? 'recommended-family' : ''}`;
+          chip.innerHTML = `
+            <span class="crop-chip-name">${c.crop}</span>
+            <span class="crop-chip-metric">${c.records_count} yrs • ${c.avg_yield_tonnes_ha} t/ha</span>
+          `;
+          flow.appendChild(chip);
+        });
+      } else {
+        flow.innerHTML = '<span style="font-size: 0.8rem; color: var(--text-dim);">No specific crop history recorded for this district.</span>';
+      }
+
+      const bench = data.soil_benchmark || {};
+      document.getElementById('stripSoilType').textContent = bench.soil_type || 'Agricultural Loam';
+      document.getElementById('stripN').textContent = bench.N || 195;
+      document.getElementById('stripP').textContent = bench.P || 26;
+      document.getElementById('stripK').textContent = bench.K || 285;
+      document.getElementById('stripPH').textContent = bench.ph || 7.5;
+    }
+
+    function setWaterPreset(val) {
+      document.getElementById('inputRain').value = val;
+    }
+
+    function fillDistrictSoilBenchmark() {
+      const bench = CURRENT_DISTRICT_INTEL.soil_benchmark;
+      if (bench) {
+        document.getElementById('inputN').value = bench.N || 195;
+        document.getElementById('inputP').value = bench.P || 26;
+        document.getElementById('inputK').value = bench.K || 285;
+        document.getElementById('inputPH').value = bench.ph || 7.5;
+        
+        // Realistic seasonal crop water availability (default 90-120mm based on district annual rainfall)
+        const rainNormal = bench.rainfall_normal || 800;
+        const seasonalWater = rainNormal > 1000 ? 160 : (rainNormal > 600 ? 100 : 70);
+        document.getElementById('inputRain').value = seasonalWater;
+        
+        const btn = event.currentTarget;
+        const oldText = btn.innerHTML;
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> Benchmark Loaded!`;
+        btn.style.borderColor = '#10b981';
+        btn.style.color = '#34d399';
+        setTimeout(() => {
+          btn.innerHTML = oldText;
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 1800);
+      }
+    }
+
+    function syncWeatherToInputs() {
+      const temp = document.getElementById('telemetryTemp').textContent;
+      const hum = document.getElementById('telemetryHum').textContent;
+      const rain = document.getElementById('telemetryRain').textContent;
+
+      if (temp !== '--') document.getElementById('inputTemp').value = temp;
+      if (hum !== '--') document.getElementById('inputHum').value = hum;
+      if (rain !== '--' && parseFloat(rain) > 0) {
+        document.getElementById('inputRain').value = rain;
+      }
+
+      const btn = event.currentTarget;
+      const oldText = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-check"></i> Synced!`;
+      setTimeout(() => { btn.innerHTML = oldText; }, 1500);
+    }
+
+    function detectGPSLocation() {
+      const statusText = document.getElementById('telemetryStatusText');
+      statusText.textContent = "Acquiring GPS farm coordinates...";
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            statusText.textContent = `GPS: ${lat.toFixed(4)}, ${lon.toFixed(4)} • Querying weather telemetry...`;
+
+            try {
+              const resp = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+              const data = await resp.json();
+              if (data.status === 'success') {
+                document.getElementById('displayLocationName').textContent = data.location_name || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+                document.getElementById('telemetryTemp').textContent = data.temperature;
+                document.getElementById('telemetryHum').textContent = data.humidity;
+                document.getElementById('telemetryRain').textContent = data.rainfall;
+                statusText.textContent = `Live GPS Telemetry: ${data.location_name} • Open-Meteo Precision Telemetry`;
+
+                document.getElementById('inputTemp').value = data.temperature;
+                document.getElementById('inputHum').value = data.humidity;
+                if (data.rainfall !== undefined && parseFloat(data.rainfall) > 0) {
+                  document.getElementById('inputRain').value = data.rainfall;
+                }
+
+                const targetState = data.matched_state || data.detected_state;
+                const targetDistrict = data.matched_district || data.detected_city;
+
+                // Sync State dropdown without triggering a conflicting weather fetch
+                if (targetState) {
+                  const stateSelect = document.getElementById('stateSelect');
+                  for (let i = 0; i < stateSelect.options.length; i++) {
+                    if (stateSelect.options[i].value.toLowerCase() === targetState.toLowerCase()) {
+                      stateSelect.selectedIndex = i;
+                      break;
+                    }
+                  }
+                  
+                  // Re-populate district dropdown for the detected state
+                  const districtSelect = document.getElementById('districtSelect');
+                  const dists = DISTRICT_REGIONS[stateSelect.value] || [];
+                  districtSelect.innerHTML = '';
+                  let matchedDistIndex = 0;
+                  dists.forEach((d, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = d;
+                    opt.textContent = d;
+                    if (targetDistrict && (d.toLowerCase() === targetDistrict.toLowerCase() || d.toLowerCase().includes(targetDistrict.toLowerCase()) || targetDistrict.toLowerCase().includes(d.toLowerCase()))) {
+                      matchedDistIndex = idx;
+                    }
+                    districtSelect.appendChild(opt);
+                  });
+                  if (dists.length > 0) {
+                    districtSelect.selectedIndex = matchedDistIndex;
+                  }
+                  
+                  // Load district historical crop intelligence (WITHOUT fetching weather, keeping live GPS weather!)
+                  onDistrictChange(false);
+                }
+              }
+            } catch (e) {
+              statusText.textContent = "Telemetry fetch failed. Using selected district.";
+              fetchWeatherForDistrict();
+            }
+          },
+          (err) => {
+            statusText.textContent = "GPS not enabled. Telemetry synced to selected district.";
+            fetchWeatherForDistrict();
+          },
+          { timeout: 7000 }
+        );
+      } else {
+        statusText.textContent = "GPS not supported. Telemetry synced to selected district.";
+        fetchWeatherForDistrict();
+      }
+    }
+
+    async function fetchWeatherForDistrict() {
+      const state = document.getElementById('stateSelect').value;
+      const district = document.getElementById('districtSelect').value;
+      if (!district) return;
+      const statusText = document.getElementById('telemetryStatusText');
+      try {
+        const resp = await fetch(`/api/weather?district=${encodeURIComponent(district)}&state=${encodeURIComponent(state)}`);
+        const data = await resp.json();
+        if (data.status === 'success') {
+          document.getElementById('displayLocationName').textContent = data.location_name || `${district}, ${state}`;
+          document.getElementById('telemetryTemp').textContent = data.temperature;
+          document.getElementById('telemetryHum').textContent = data.humidity;
+          document.getElementById('telemetryRain').textContent = data.rainfall;
+          statusText.textContent = `Station Telemetry: ${data.location_name}`;
+
+          document.getElementById('inputTemp').value = data.temperature;
+          document.getElementById('inputHum').value = data.humidity;
+          if (data.rainfall && parseFloat(data.rainfall) > 0) {
+            document.getElementById('inputRain').value = data.rainfall;
+          }
+        }
+      } catch (e) {
+        console.error("Could not fetch district weather:", e);
+      }
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      const oldBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Analyzing 81k Records & Soil Chemistry...</span>`;
+      submitBtn.disabled = true;
+
+      const payload = {
+        state: document.getElementById('stateSelect').value,
+        district: document.getElementById('districtSelect').value,
+        season: document.getElementById('seasonSelect').value,
+        farm_area: parseFloat(document.getElementById('farmAreaInput').value || 2.0),
+        N: parseFloat(document.getElementById('inputN').value || 0),
+        P: parseFloat(document.getElementById('inputP').value || 0),
+        K: parseFloat(document.getElementById('inputK').value || 0),
+        ph: parseFloat(document.getElementById('inputPH').value || 7.0),
+        temperature: parseFloat(document.getElementById('inputTemp').value || 25),
+        humidity: parseFloat(document.getElementById('inputHum').value || 70),
+        rainfall: parseFloat(document.getElementById('inputRain').value || 0)
+      };
+
+      try {
+        const resp = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const json = await resp.json();
+        if (json.status === 'success') {
+          renderDashboardResults(json.data, payload);
+        } else {
+          alert('Error: ' + json.message);
+        }
+      } catch (err) {
+        console.error('Prediction failed, falling back to form submit:', err);
+        document.getElementById('agriForm').submit();
+      } finally {
+        submitBtn.innerHTML = oldBtnText;
+        submitBtn.disabled = false;
+      }
+    }
+
+    function renderDashboardResults(data, inputs) {
+      const initialCard = document.getElementById('initialEmptyCard');
+      if (initialCard) initialCard.style.display = 'none';
+
+      // Hide any previous hero cards if rendered via Jinja
+      const existingHero = document.querySelector('.results-hero-card');
+      if (existingHero) existingHero.style.display = 'none';
+      const existingRadar = document.querySelector('.radar-container');
+      if (existingRadar) existingRadar.style.display = 'none';
+      const existingAdvisory = document.querySelector('.advisory-card');
+      if (existingAdvisory) existingAdvisory.style.display = 'none';
+      const existingAlts = document.querySelector('#resultsDashboardColumn .card');
+      if (existingAlts) existingAlts.style.display = 'none';
+
+      const container = document.getElementById('activeResultsContainer');
+      container.style.display = 'block';
+
+      const primary = data.top_predictions[0];
+      const advisory = data.advisory;
+      const reg = data.regional_context;
+
+      let recsHtml = '';
+      advisory.recommendations.forEach(r => {
+        let iconClass = r.status === 'Optimal' ? 'fa-check' : (r.status === 'Deficient' ? 'fa-arrow-up' : 'fa-arrow-down');
+        recsHtml += `
+          <div class="advisory-item">
+            <div class="advisory-icon ${r.status}">
+              <i class="fa-solid ${iconClass}"></i>
+            </div>
+            <div>
+              <div class="advisory-title">
+                <span>${r.nutrient}</span>
+                <span style="font-size: 0.74rem; font-family: 'JetBrains Mono', monospace; color: var(--text-dim);">[${r.gap}]</span>
+              </div>
+              <div class="advisory-desc">${r.action}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      let altsHtml = '';
+      data.top_predictions.forEach(p => {
+        let tradBadge = p.is_traditional_in_district ? `• <span style="color: #38bdf8;">District Staple</span>` : '';
+        altsHtml += `
+          <div class="alt-crop-row">
+            <div class="alt-crop-left">
+              <span class="alt-rank">#${p.rank}</span>
+              <div>
+                <div class="alt-name">${p.crop}</div>
+                <div class="alt-meta">${p.category} • ${p.water_need} ${tradBadge}</div>
+              </div>
+            </div>
+            <div class="alt-bar-wrap">
+              <div class="alt-bar-bg">
+                <div class="alt-bar-fill" style="width: ${p.confidence}%;"></div>
+              </div>
+              <div class="alt-pct">${p.confidence.toFixed(1)}%</div>
+            </div>
+          </div>
+        `;
+      });
+
+      let yieldTag = '';
+      if (reg.primary_predicted_yield) {
+        let estTotal = reg.primary_total_est_production ? ` (${reg.primary_total_est_production} t total)` : '';
+        yieldTag = `<div class="yield-forecast-pill">🌾 Est. Yield: ${reg.primary_predicted_yield} t/ha${estTotal}</div>`;
+      }
+
+      container.innerHTML = `
+        <div class="results-hero-card">
+          <div class="hero-top">
+            <div class="hero-crop-meta">
+              <div class="hero-crop-icon">
+                <i class="fa-solid fa-wheat-awn"></i>
+              </div>
+              <div>
+                <div class="hero-crop-name">${data.primary_crop}</div>
+                <div class="hero-crop-category">${advisory.agronomy.category} • ${advisory.agronomy.duration}</div>
+              </div>
+            </div>
+            <div class="hero-confidence-badge">
+              <div class="confidence-number">${data.primary_confidence.toFixed(1)}%</div>
+              <div class="confidence-label">Suitability Match</div>
+            </div>
+          </div>
+
+          <div class="regional-status-banner">
+            <div class="regional-badge">
+              ${reg.is_primary_traditional 
+                ? `<i class="fa-solid fa-circle-check" style="color: #34d399;"></i> <span>Historically Cultivated Staple in ${reg.district}</span>` 
+                : `<i class="fa-solid fa-lightbulb" style="color: #38bdf8;"></i> <span>High Agronomic Match for ${reg.district} Soil</span>`}
+            </div>
+            ${yieldTag}
+          </div>
+
+          <div class="crop-attributes-grid">
+            <div class="attr-card">
+              <div class="attr-label">Primary Season</div>
+              <div class="attr-val">${advisory.agronomy.season}</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-label">Water Footprint</div>
+              <div class="attr-val">${advisory.agronomy.water_need}</div>
+            </div>
+            <div class="attr-card">
+              <div class="attr-label">Target pH Buffer</div>
+              <div class="attr-val">${advisory.ph_status}</div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.85rem;">
+            ${advisory.agronomy.description}
+          </div>
+        </div>
+
+        <div class="radar-container">
+          <div class="card-title" style="margin-bottom: 1rem;">
+            <i class="fa-solid fa-chart-radar"></i>
+            <span>Soil Nutrient Match vs Ideal Agronomic Requirements</span>
+          </div>
+          <div class="chart-box">
+            <canvas id="soilRadarCanvasDynamic"></canvas>
+          </div>
+        </div>
+
+        <div class="advisory-card">
+          <div class="card-title" style="margin-bottom: 1rem;">
+            <i class="fa-solid fa-prescription-bottle-medical"></i>
+            <span>Commercial Fertilizer & Soil Conditioning Advisory (ICAR)</span>
+          </div>
+          ${recsHtml}
+          <div class="advisory-item">
+            <div class="advisory-icon Optimal">
+              <i class="fa-solid fa-droplet-slash"></i>
+            </div>
+            <div>
+              <div class="advisory-title">Soil Acidity / Alkalinity Conditioning</div>
+              <div class="advisory-desc">${advisory.ph_advice}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-ranking-star"></i>
+              <span>Alternative Viable Crops for Your Soil</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="alt-crops-list">
+              ${altsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+
+      const radarCanvas = document.getElementById('soilRadarCanvasDynamic');
+      if (radarCanvas) {
+        if (radarChartInstance) {
+          radarChartInstance.destroy();
+        }
+
+        radarChartInstance = new Chart(radarCanvas, {
+          type: 'radar',
+          data: {
+            labels: ['Nitrogen (kg/ha)', 'Phosphorus (kg/ha)', 'Potassium (kg/ha)', 'Soil pH (scaled x10)'],
+            datasets: [
+              {
+                label: 'Your Current Soil Test',
+                data: [inputs.N, inputs.P, inputs.K, inputs.ph * 10],
+                borderColor: '#0ea5e9',
+                backgroundColor: 'rgba(14, 165, 233, 0.25)',
+                borderWidth: 2,
+                pointBackgroundColor: '#0ea5e9'
+              },
+              {
+                label: `Ideal for ${data.primary_crop}`,
+                data: [advisory.ideal_npk[0], advisory.ideal_npk[1], advisory.ideal_npk[2], 70],
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                borderWidth: 2,
+                pointBackgroundColor: '#10b981'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                pointLabels: {
+                  color: '#94a3b8',
+                  font: { size: 11, weight: '600' }
+                },
+                ticks: { display: false }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: { color: '#f8fafc', font: { size: 12, weight: '600' } }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await loadRegions();
+      onDistrictChange(false);
+      detectGPSLocation();
+    });
+  </script>
+
+</body>
+</html>

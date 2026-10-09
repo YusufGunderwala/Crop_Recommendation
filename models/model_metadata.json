@@ -1,0 +1,346 @@
+{
+  "model_type": "Multi-Tier Precision Agriculture AI System",
+  "training_data_summary": {
+    "crop_recommendation_trials": 2200,
+    "regional_production_records": 81329,
+    "government_data_source": "Ministry of Agriculture & Farmers Welfare, Government of India (DES)",
+    "data_authenticity": "100% Real Authentic Records (Zero Synthetic/Mock Data)",
+    "total_states": 33,
+    "total_districts": 645
+  },
+  "recommender_metrics": {
+    "model": "StandardScaler + RandomForestClassifier",
+    "accuracy": 0.9977,
+    "weighted_f1": 0.9977,
+    "n_classes": 22,
+    "feature_names": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall"
+    ]
+  },
+  "yield_predictor_metrics": {
+    "model": "TargetEncoder + HistGradientBoostingRegressor",
+    "log_r2_score": 0.8332,
+    "mae_tonnes_ha": 5.4604,
+    "training_samples": 79769
+  },
+  "crop_dictionary": {
+    "1": "Rice",
+    "2": "Maize",
+    "3": "Jute",
+    "4": "Cotton",
+    "5": "Coconut",
+    "6": "Papaya",
+    "7": "Orange",
+    "8": "Apple",
+    "9": "Muskmelon",
+    "10": "Watermelon",
+    "11": "Grapes",
+    "12": "Mango",
+    "13": "Banana",
+    "14": "Pomegranate",
+    "15": "Lentil",
+    "16": "Blackgram",
+    "17": "Mungbean",
+    "18": "Mothbeans",
+    "19": "Pigeonpeas",
+    "20": "Kidneybeans",
+    "21": "Chickpea",
+    "22": "Coffee"
+  },
+  "name_to_id": {
+    "rice": 1,
+    "maize": 2,
+    "jute": 3,
+    "cotton": 4,
+    "coconut": 5,
+    "papaya": 6,
+    "orange": 7,
+    "apple": 8,
+    "muskmelon": 9,
+    "watermelon": 10,
+    "grapes": 11,
+    "mango": 12,
+    "banana": 13,
+    "pomegranate": 14,
+    "lentil": 15,
+    "blackgram": 16,
+    "mungbean": 17,
+    "mothbeans": 18,
+    "pigeonpeas": 19,
+    "kidneybeans": 20,
+    "chickpea": 21,
+    "coffee": 22
+  },
+  "crop_agronomy": {
+    "Rice": {
+      "season": "Kharif (Monsoon)",
+      "duration": "100 - 150 days",
+      "water_need": "High (1200 - 2000 mm)",
+      "ideal_npk": [
+        80,
+        40,
+        40
+      ],
+      "category": "Cereal Food Grain",
+      "description": "Staple food crop thriving in warm, humid climates with heavy standing water or fertile clayey-loam soils."
+    },
+    "Maize": {
+      "season": "Kharif / Rabi",
+      "duration": "90 - 120 days",
+      "water_need": "Moderate (500 - 800 mm)",
+      "ideal_npk": [
+        80,
+        40,
+        20
+      ],
+      "category": "Cereal / Coarse Grain",
+      "description": "Versatile cereal crop requiring well-drained fertile loam soils and warm temperatures."
+    },
+    "Jute": {
+      "season": "Kharif",
+      "duration": "120 - 150 days",
+      "water_need": "High (1000 - 1500 mm)",
+      "ideal_npk": [
+        80,
+        40,
+        40
+      ],
+      "category": "Commercial Fiber",
+      "description": "Golden fiber crop requiring warm, humid alluvial plains and abundant monsoon showers."
+    },
+    "Cotton": {
+      "season": "Kharif",
+      "duration": "150 - 180 days",
+      "water_need": "Moderate (600 - 1000 mm)",
+      "ideal_npk": [
+        120,
+        40,
+        20
+      ],
+      "category": "Commercial Fiber",
+      "description": "Cash crop performing best in deep black cotton soils (regur) with sunny, frost-free weather."
+    },
+    "Coconut": {
+      "season": "Perennial Plantation",
+      "duration": "Continuous (Year-round)",
+      "water_need": "High (1300 - 2300 mm)",
+      "ideal_npk": [
+        20,
+        10,
+        30
+      ],
+      "category": "Plantation / Oilseed",
+      "description": "Tropical palm flourishing in coastal sandy-loam soils with warm humid tropical maritime conditions."
+    },
+    "Papaya": {
+      "season": "Year-round",
+      "duration": "270 - 360 days",
+      "water_need": "Moderate (1000 - 1500 mm)",
+      "ideal_npk": [
+        50,
+        50,
+        50
+      ],
+      "category": "Fruit Crop",
+      "description": "Fast-growing fruit requiring rich organic loam with strict avoidance of waterlogging."
+    },
+    "Orange": {
+      "season": "Sub-tropical Perennial",
+      "duration": "Annual harvest",
+      "water_need": "Moderate (800 - 1200 mm)",
+      "ideal_npk": [
+        20,
+        10,
+        10
+      ],
+      "category": "Citrus Fruit",
+      "description": "Citrus fruit favoring slightly acidic to neutral soils with distinct dry and wet seasons."
+    },
+    "Apple": {
+      "season": "Temperate Perennial",
+      "duration": "Annual harvest",
+      "water_need": "Moderate (1000 - 1250 mm)",
+      "ideal_npk": [
+        20,
+        125,
+        200
+      ],
+      "category": "Temperate Fruit",
+      "description": "Temperate fruit demanding chill hours (below 7\u00b0C) and potassium-rich hill loams."
+    },
+    "Muskmelon": {
+      "season": "Zaid (Summer)",
+      "duration": "70 - 90 days",
+      "water_need": "Low-Moderate (400 - 600 mm)",
+      "ideal_npk": [
+        100,
+        10,
+        50
+      ],
+      "category": "Cucurbit / Fruit",
+      "description": "Warm-season melon thriving in sandy-loam soils with plenty of sunshine and dry air at harvest."
+    },
+    "Watermelon": {
+      "season": "Zaid (Summer)",
+      "duration": "80 - 100 days",
+      "water_need": "Moderate (500 - 700 mm)",
+      "ideal_npk": [
+        100,
+        10,
+        50
+      ],
+      "category": "Cucurbit / Fruit",
+      "description": "Heat-loving crop requiring fertile sandy soils, long warm days, and moderate irrigation."
+    },
+    "Grapes": {
+      "season": "Sub-tropical Perennial",
+      "duration": "Annual harvest",
+      "water_need": "Moderate (600 - 900 mm)",
+      "ideal_npk": [
+        20,
+        125,
+        200
+      ],
+      "category": "Vine Fruit",
+      "description": "High-value fruit needing hot dry summers, deep well-drained loam, and balanced potassium."
+    },
+    "Mango": {
+      "season": "Tropical Perennial",
+      "duration": "Annual harvest",
+      "water_need": "Moderate (700 - 1100 mm)",
+      "ideal_npk": [
+        20,
+        20,
+        30
+      ],
+      "category": "Tropical Fruit",
+      "description": "King of fruits; adapts to diverse tropical soils provided there is a distinct dry spell for flowering."
+    },
+    "Banana": {
+      "season": "Tropical Perennial",
+      "duration": "300 - 365 days",
+      "water_need": "High (1500 - 2200 mm)",
+      "ideal_npk": [
+        100,
+        75,
+        50
+      ],
+      "category": "Horticultural Fruit",
+      "description": "Heavy feeder requiring rich clay-loam, high humidity, continuous warmth, and generous watering."
+    },
+    "Pomegranate": {
+      "season": "Arid / Semi-arid",
+      "duration": "Annual harvest",
+      "water_need": "Low (500 - 700 mm)",
+      "ideal_npk": [
+        20,
+        10,
+        40
+      ],
+      "category": "Arid Fruit",
+      "description": "Drought-tolerant high-value fruit that excels in semi-arid plains with well-drained soils."
+    },
+    "Lentil": {
+      "season": "Rabi (Winter)",
+      "duration": "110 - 130 days",
+      "water_need": "Low (300 - 450 mm)",
+      "ideal_npk": [
+        20,
+        60,
+        20
+      ],
+      "category": "Pulse / Legume",
+      "description": "Cool-season nitrogen-fixing pulse crop thriving on residual moisture in fertile loams."
+    },
+    "Blackgram": {
+      "season": "Kharif / Zaid",
+      "duration": "75 - 90 days",
+      "water_need": "Low-Moderate (400 - 600 mm)",
+      "ideal_npk": [
+        40,
+        60,
+        20
+      ],
+      "category": "Pulse / Legume",
+      "description": "Nutritious legume that improves soil fertility; suited for tropical and sub-tropical loamy soils."
+    },
+    "Mungbean": {
+      "season": "Kharif / Zaid",
+      "duration": "60 - 75 days",
+      "water_need": "Low (350 - 500 mm)",
+      "ideal_npk": [
+        20,
+        40,
+        20
+      ],
+      "category": "Pulse / Legume",
+      "description": "Short-duration pulse ideal for crop rotation and intercropping in warm regions."
+    },
+    "Mothbeans": {
+      "season": "Kharif (Arid)",
+      "duration": "75 - 90 days",
+      "water_need": "Very Low (200 - 400 mm)",
+      "ideal_npk": [
+        20,
+        40,
+        20
+      ],
+      "category": "Pulse / Legume",
+      "description": "Remarkably drought-resilient pulse crop native to arid and semi-arid desert regions."
+    },
+    "Pigeonpeas": {
+      "season": "Kharif (Long duration)",
+      "duration": "150 - 200 days",
+      "water_need": "Moderate (600 - 800 mm)",
+      "ideal_npk": [
+        20,
+        60,
+        20
+      ],
+      "category": "Pulse / Legume",
+      "description": "Deep-rooted legume resilient to dry spells, extensively cultivated in dryland agriculture."
+    },
+    "Kidneybeans": {
+      "season": "Rabi / Temperate",
+      "duration": "90 - 120 days",
+      "water_need": "Moderate (500 - 700 mm)",
+      "ideal_npk": [
+        20,
+        60,
+        20
+      ],
+      "category": "Pulse / Legume",
+      "description": "High-protein bean crop suited for cool, temperate highland conditions and rich light soils."
+    },
+    "Chickpea": {
+      "season": "Rabi (Winter)",
+      "duration": "90 - 120 days",
+      "water_need": "Low (300 - 500 mm)",
+      "ideal_npk": [
+        40,
+        60,
+        80
+      ],
+      "category": "Pulse / Legume",
+      "description": "Major winter pulse thriving in dry, cool conditions with residual soil moisture and deep black/loam soils."
+    },
+    "Coffee": {
+      "season": "Tropical Highland Perennial",
+      "duration": "Annual harvest",
+      "water_need": "High (1500 - 2200 mm)",
+      "ideal_npk": [
+        100,
+        20,
+        30
+      ],
+      "category": "Beverage Plantation",
+      "description": "Shade-loving plantation crop requiring cool tropical highlands, rich acidic soils, and plentiful rain."
+    }
+  }
+}
