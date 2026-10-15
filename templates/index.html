@@ -209,125 +209,12 @@
       font-weight: 700;
     }
 
-    .btn-gps {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(14, 165, 233, 0.15));
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #34d399;
-      padding: 0.45rem 0.95rem;
-      border-radius: 8px;
-      font-size: 0.83rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn-gps:hover {
-      background: rgba(16, 185, 129, 0.25);
-      border-color: #34d399;
-      color: #fff;
-      transform: translateY(-1px);
-    }
-
     .main-container {
       max-width: 1360px;
       margin: 1.5rem auto 3rem;
       padding: 0 1.5rem;
       position: relative;
       z-index: 10;
-    }
-
-    .top-telemetry-banner {
-      background: rgba(14, 22, 36, 0.62);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow);
-      border-radius: 16px;
-      padding: 1.15rem 1.6rem;
-      margin-bottom: 1.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .top-telemetry-banner::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 30%, rgba(56, 189, 248, 0.45) 70%, transparent 100%);
-      pointer-events: none;
-    }
-
-    .top-telemetry-banner:hover {
-      border-color: rgba(56, 189, 248, 0.35);
-      box-shadow: 0 20px 48px -6px rgba(0, 0, 0, 0.6), 0 0 24px rgba(14, 165, 233, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-    }
-
-    .telemetry-location {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .telemetry-location-dot {
-      width: 10px;
-      height: 10px;
-      background-color: var(--primary);
-      border-radius: 50%;
-      box-shadow: 0 0 14px var(--primary);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      70% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-    }
-
-    .location-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.2px;
-    }
-
-    .telemetry-readings {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      flex-wrap: wrap;
-    }
-
-    .telemetry-pill {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      background: rgba(8, 14, 24, 0.55);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 0.45rem 0.9rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
-    }
-
-    .telemetry-pill i {
-      color: var(--accent);
-    }
-
-    .telemetry-pill strong {
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
     }
 
     .district-intel-card {
@@ -1139,48 +1026,15 @@
       </div>
 
       <div class="nav-stats">
-        <button class="btn-gps" onclick="detectGPSLocation()">
-          <i class="fa-solid fa-location-crosshairs"></i>
-          <span>Auto-Detect Farm (GPS)</span>
-        </button>
+        <div class="stat-badge">
+          <i class="fa-solid fa-microchip"></i>
+          <span>Dual-Tier AI Agronomic Advisor</span>
+        </div>
       </div>
     </div>
   </header>
 
   <div class="main-container">
-
-    <!-- Live Telemetry Status Banner -->
-    <div class="top-telemetry-banner">
-      <div class="telemetry-location">
-        <div class="telemetry-location-dot"></div>
-        <div>
-          <div class="location-name" id="displayLocationName">
-            {{ default_district }}, {{ default_state }}
-          </div>
-          <div style="font-size: 0.74rem; color: var(--text-dim);" id="telemetryStatusText">
-            Connected to Open-Meteo Precision Weather Station
-          </div>
-        </div>
-      </div>
-
-      <div class="telemetry-readings">
-        <div class="telemetry-pill">
-          <i class="fa-solid fa-temperature-half"></i>
-          <span>Temp: <strong id="telemetryTemp">--</strong>°C</span>
-        </div>
-        <div class="telemetry-pill">
-          <i class="fa-solid fa-droplet"></i>
-          <span>Humidity: <strong id="telemetryHum">--</strong>%</span>
-        </div>
-        <div class="telemetry-pill">
-          <i class="fa-solid fa-cloud-rain"></i>
-          <span>Rainfall: <strong id="telemetryRain">0.0</strong> mm</span>
-        </div>
-        <button class="btn-benchmark" onclick="syncWeatherToInputs()" style="padding: 0.35rem 0.75rem;">
-          <i class="fa-solid fa-arrows-rotate"></i> Sync Weather
-        </button>
-      </div>
-    </div>
 
     <!-- District Historical Agricultural Intelligence Card -->
     <div class="district-intel-card">
@@ -1355,7 +1209,7 @@
             <div class="card-header">
               <div class="card-title">
                 <i class="fa-solid fa-cloud-sun"></i>
-                <span>3. Agro-Climatic Readings (Auto-Synced from Stations)</span>
+                <span>3. Climate & Seasonal Water Parameters</span>
               </div>
             </div>
             <div class="card-body">
@@ -1577,7 +1431,7 @@
             </div>
             <div class="empty-state-title">Precision Agronomic Intelligence Ready</div>
             <div class="empty-state-desc">
-              Select your Indian State & District, sync live weather station telemetry, or enter your Soil Health Card test values to generate calibrated recommendations.
+              Select your Indian State & District and enter your Soil Health Card test values or click "Fill District Soil Benchmark" to generate calibrated recommendations.
             </div>
           </div>
 
@@ -1697,12 +1551,11 @@
       }
     }
 
-    async function onDistrictChange(fetchWeather = true) {
+    async function onDistrictChange() {
       const state = document.getElementById('stateSelect').value;
       const district = document.getElementById('districtSelect').value;
       if (!district) return;
       
-      document.getElementById('displayLocationName').textContent = `${district}, ${state}`;
       document.getElementById('intelDistrictTitle').textContent = district;
       document.getElementById('intelStateTitle').textContent = state;
 
@@ -1715,10 +1568,6 @@
         }
       } catch (err) {
         console.error("Could not fetch district intel:", err);
-      }
-
-      if (fetchWeather) {
-        fetchWeatherForDistrict();
       }
     }
 
@@ -1759,6 +1608,8 @@
         document.getElementById('inputP').value = bench.P || 26;
         document.getElementById('inputK').value = bench.K || 285;
         document.getElementById('inputPH').value = bench.ph || 7.5;
+        if (bench.temp_normal) document.getElementById('inputTemp').value = bench.temp_normal;
+        if (bench.humidity_normal) document.getElementById('inputHum').value = bench.humidity_normal;
         
         // Realistic seasonal crop water availability (default 90-120mm based on district annual rainfall)
         const rainNormal = bench.rainfall_normal || 800;
@@ -1775,135 +1626,6 @@
           btn.style.borderColor = '';
           btn.style.color = '';
         }, 1800);
-      }
-    }
-
-    function syncWeatherToInputs() {
-      const temp = document.getElementById('telemetryTemp').textContent;
-      const hum = document.getElementById('telemetryHum').textContent;
-      const rain = document.getElementById('telemetryRain').textContent;
-
-      if (temp !== '--') document.getElementById('inputTemp').value = temp;
-      if (hum !== '--') document.getElementById('inputHum').value = hum;
-      if (rain !== '--' && parseFloat(rain) > 0) {
-        document.getElementById('inputRain').value = rain;
-      }
-
-      const btn = event.currentTarget;
-      const oldText = btn.innerHTML;
-      btn.innerHTML = `<i class="fa-solid fa-check"></i> Synced!`;
-      setTimeout(() => { btn.innerHTML = oldText; }, 1500);
-    }
-
-    async function applyDetectedTelemetry(data) {
-      if (!data || data.status !== 'success') return;
-
-      const targetDistrict = data.matched_district || data.detected_city || data.detected_district;
-      const targetState = data.matched_state || data.detected_state || "Gujarat";
-
-      document.getElementById('displayLocationName').textContent = data.location_name || `${targetDistrict}, ${targetState}`;
-      document.getElementById('telemetryTemp').textContent = data.temperature;
-      document.getElementById('telemetryHum').textContent = data.humidity;
-      document.getElementById('telemetryRain').textContent = data.rainfall;
-      
-      const statusText = document.getElementById('telemetryStatusText');
-      statusText.textContent = `Auto-Detected Location: ${data.location_name || targetDistrict} • Agro-Climatic Station Synced`;
-
-      document.getElementById('inputTemp').value = data.temperature;
-      document.getElementById('inputHum').value = data.humidity;
-      if (data.rainfall !== undefined && parseFloat(data.rainfall) > 0) {
-        document.getElementById('inputRain').value = data.rainfall;
-      }
-
-      // Sync State dropdown
-      const stateSelect = document.getElementById('stateSelect');
-      for (let i = 0; i < stateSelect.options.length; i++) {
-        if (stateSelect.options[i].value.toLowerCase() === targetState.toLowerCase()) {
-          stateSelect.selectedIndex = i;
-          break;
-        }
-      }
-
-      // Re-populate district dropdown for the detected state
-      const districtSelect = document.getElementById('districtSelect');
-      const dists = DISTRICT_REGIONS[stateSelect.value] || [];
-      districtSelect.innerHTML = '';
-      let matchedDistIndex = 0;
-      dists.forEach((d, idx) => {
-        const opt = document.createElement('option');
-        opt.value = d;
-        opt.textContent = d;
-        if (targetDistrict && (d.toUpperCase() === targetDistrict.toUpperCase() || d.toLowerCase() === targetDistrict.toLowerCase() || d.toLowerCase().includes(targetDistrict.toLowerCase()) || targetDistrict.toLowerCase().includes(d.toLowerCase()))) {
-          matchedDistIndex = idx;
-        }
-        districtSelect.appendChild(opt);
-      });
-      if (dists.length > 0) {
-        districtSelect.selectedIndex = matchedDistIndex;
-      }
-
-      // Load district historical crop intelligence
-      onDistrictChange(false);
-    }
-
-    async function handleGPSCoords(lat, lon) {
-      const statusText = document.getElementById('telemetryStatusText');
-      statusText.textContent = `Acquiring coordinates (${lat.toFixed(4)}, ${lon.toFixed(4)}) • Matching nearest district...`;
-      try {
-        const resp = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
-        const data = await resp.json();
-        if (data.status === 'success') {
-          applyDetectedTelemetry(data);
-        }
-      } catch (e) {
-        console.error("Telemetry fetch error:", e);
-        statusText.textContent = "Telemetry fetch failed. Using selected district.";
-      }
-    }
-
-    function detectGPSLocation() {
-      const statusText = document.getElementById('telemetryStatusText');
-      statusText.textContent = "Acquiring GPS farm coordinates...";
-
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            handleGPSCoords(pos.coords.latitude, pos.coords.longitude);
-          },
-          (err) => {
-            console.warn("Browser GPS permission not granted or unavailable, resolving location coordinates:", err);
-            handleGPSCoords(22.5692, 72.9531);
-          },
-          { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
-        );
-      } else {
-        handleGPSCoords(22.5692, 72.9531);
-      }
-    }
-
-    async function fetchWeatherForDistrict() {
-      const state = document.getElementById('stateSelect').value;
-      const district = document.getElementById('districtSelect').value;
-      if (!district) return;
-      const statusText = document.getElementById('telemetryStatusText');
-      try {
-        const resp = await fetch(`/api/weather?district=${encodeURIComponent(district)}&state=${encodeURIComponent(state)}`);
-        const data = await resp.json();
-        if (data.status === 'success') {
-          document.getElementById('displayLocationName').textContent = data.location_name || `${district}, ${state}`;
-          document.getElementById('telemetryTemp').textContent = data.temperature;
-          document.getElementById('telemetryHum').textContent = data.humidity;
-          document.getElementById('telemetryRain').textContent = data.rainfall;
-          statusText.textContent = `Station Telemetry: ${data.location_name}`;
-
-          document.getElementById('inputTemp').value = data.temperature;
-          document.getElementById('inputHum').value = data.humidity;
-          if (data.rainfall && parseFloat(data.rainfall) > 0) {
-            document.getElementById('inputRain').value = data.rainfall;
-          }
-        }
-      } catch (e) {
-        console.error("Could not fetch district weather:", e);
       }
     }
 
@@ -2162,7 +1884,7 @@
 
     document.addEventListener("DOMContentLoaded", async () => {
       await loadRegions();
-      onDistrictChange(true);
+      onDistrictChange();
     });
   </script>
 
