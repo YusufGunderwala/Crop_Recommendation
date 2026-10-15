@@ -43,88 +43,38 @@
     }
 
     body {
-      background-color: var(--bg);
+      background-color: #0b1120;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.18) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(5, 150, 105, 0.08) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
-        linear-gradient(180deg, rgba(7, 11, 18, 0.84) 0%, rgba(10, 15, 26, 0.92) 100%),
-        url('/static/annie-spratt-e6AxXcUSeig-unsplash.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.08) 0px, transparent 50%),
+        linear-gradient(180deg, rgba(8, 14, 24, 0.94) 0%, rgba(11, 17, 32, 0.98) 100%);
       color: var(--text);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       line-height: 1.5;
-      position: relative;
-      overflow-x: hidden;
     }
 
-    /* Ambient Liquid Orbs & Mesh Canvas */
-    .liquid-mesh-grid {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-      background-size: 32px 32px;
-      pointer-events: none;
-      z-index: 0;
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #34d399;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin: 1.25rem 0 0.85rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .liquid-orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(95px);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.65;
-      mix-blend-mode: screen;
+    .section-divider:first-of-type {
+      margin-top: 0;
     }
 
-    .orb-1 {
-      width: 520px;
-      height: 520px;
-      background: radial-gradient(circle, rgba(16, 185, 129, 0.35) 0%, rgba(5, 150, 105, 0) 70%);
-      top: -100px;
-      left: -100px;
-      animation: floatOrb1 20s ease-in-out infinite alternate;
-    }
-
-    .orb-2 {
-      width: 620px;
-      height: 620px;
-      background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, rgba(2, 132, 199, 0) 70%);
-      top: 25%;
-      right: -150px;
-      animation: floatOrb2 24s ease-in-out infinite alternate;
-    }
-
-    .orb-3 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(52, 211, 153, 0.25) 0%, rgba(16, 185, 129, 0) 70%);
-      bottom: 5%;
-      left: 20%;
-      animation: floatOrb3 22s ease-in-out infinite alternate;
-    }
-
-    @keyframes floatOrb1 {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(120px, 80px) scale(1.15); }
-      100% { transform: translate(40px, 160px) scale(0.95); }
-    }
-
-    @keyframes floatOrb2 {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(-100px, 120px) scale(0.9); }
-      100% { transform: translate(-50px, -80px) scale(1.1); }
-    }
-
-    @keyframes floatOrb3 {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(80px, -100px) scale(1.1); }
-      100% { transform: translate(-60px, -40px) scale(0.95); }
+    .section-divider i {
+      color: #38bdf8;
+      font-size: 0.88rem;
     }
 
     header {
@@ -223,9 +173,9 @@
       -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow);
-      border-radius: 16px;
-      padding: 1.35rem 1.6rem;
-      margin-bottom: 1.75rem;
+      border-radius: 14px;
+      padding: 0.95rem 1.35rem;
+      margin-bottom: 1.25rem;
       position: relative;
       overflow: hidden;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -251,7 +201,7 @@
 
     .district-intel-card:hover {
       border-color: rgba(56, 189, 248, 0.35);
-      box-shadow: 0 20px 48px -6px rgba(0, 0, 0, 0.6), 0 0 24px rgba(14, 165, 233, 0.12), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.5), 0 0 18px rgba(14, 165, 233, 0.1);
     }
 
     .intel-header {
@@ -259,16 +209,16 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
     }
 
     .intel-title {
-      font-size: 1rem;
+      font-size: 0.92rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
       color: #fff;
     }
 
@@ -305,8 +255,8 @@
     .district-crops-flow {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.65rem;
-      margin-bottom: 1rem;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
     }
 
     .crop-chip {
@@ -315,12 +265,12 @@
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
-      padding: 0.45rem 0.85rem;
-      border-radius: 10px;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.82rem;
+      gap: 0.45rem;
+      font-size: 0.78rem;
       color: var(--text);
       transition: all 0.2s ease;
     }
@@ -352,12 +302,12 @@
     .district-soil-strip {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1.25rem;
       flex-wrap: wrap;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 0.85rem;
+      padding-top: 0.65rem;
     }
 
     .soil-metric-item strong {
@@ -1006,12 +956,6 @@
   </style>
 </head>
 <body>
-  <!-- Ambient Liquid Mesh & Floating Orbs -->
-  <div class="liquid-mesh-grid"></div>
-  <div class="liquid-orb orb-1"></div>
-  <div class="liquid-orb orb-2"></div>
-  <div class="liquid-orb orb-3"></div>
-
   <!-- Top Sticky Navigation -->
   <header>
     <div class="nav-inner">
@@ -1042,12 +986,6 @@
         <div class="intel-title">
           <i class="fa-solid fa-chart-pie"></i>
           <span>Historically Cultivated Crops in <span id="intelDistrictTitle">{{ default_district }}</span> (<span id="intelStateTitle">{{ default_state }}</span>)</span>
-        </div>
-        <div class="intel-actions">
-          <button class="btn-benchmark" onclick="fillDistrictSoilBenchmark()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <span>Fill District Soil Benchmark</span>
-          </button>
         </div>
       </div>
 
@@ -1110,15 +1048,25 @@
       <div>
         <form action="/predict" method="POST" id="agriForm" onsubmit="handleFormSubmit(event)">
 
-          <!-- Section 1: Geographic & Seasonal Context -->
+          <!-- Unified Clean Form Card -->
           <div class="card">
             <div class="card-header">
               <div class="card-title">
-                <i class="fa-solid fa-map"></i>
-                <span>1. Geographic & Farm Specifications</span>
+                <i class="fa-solid fa-sliders"></i>
+                <span>Crop Recommendation Parameters</span>
               </div>
+              <button type="button" class="btn-benchmark" onclick="fillDistrictSoilBenchmark()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Fill District Baseline</span>
+              </button>
             </div>
             <div class="card-body">
+
+              <!-- Section 1: Geographic & Seasonal Context -->
+              <div class="section-divider">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>1. Geographic & Farm Specifications</span>
+              </div>
               <div class="form-grid-2">
                 <div class="form-group">
                   <label for="stateSelect">State / Union Territory</label>
@@ -1156,18 +1104,12 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Section 2: Soil Chemistry Parameters -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
+              <!-- Section 2: Soil Nutrients -->
+              <div class="section-divider">
                 <i class="fa-solid fa-vial"></i>
-                <span>2. Soil Nutrients (from Soil Health Card or Lab)</span>
+                <span>2. Soil Nutrients (from Soil Test)</span>
               </div>
-            </div>
-            <div class="card-body">
               <div class="form-grid-2">
                 <div class="form-group">
                   <label for="inputN">Nitrogen (N) <span class="hint">(Available N)</span></label>
@@ -1201,18 +1143,12 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Section 3: Agro-Climatic Parameters -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
+              <!-- Section 3: Climate & Seasonal Water -->
+              <div class="section-divider">
                 <i class="fa-solid fa-cloud-sun"></i>
-                <span>3. Climate & Seasonal Water Parameters</span>
+                <span>3. Climate & Water Availability</span>
               </div>
-            </div>
-            <div class="card-body">
               <div class="form-grid-2">
                 <div class="form-group">
                   <label for="inputTemp">Ambient Temperature</label>
@@ -1232,7 +1168,7 @@
 
               <div class="form-group">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
-                  <label for="inputRain" style="margin-bottom: 0;">Crop Water Availability / Seasonal Rainfall <span class="hint">(mm)</span></label>
+                  <label for="inputRain" style="margin-bottom: 0;">Seasonal Rainfall / Irrigation <span class="hint">(mm)</span></label>
                   <span style="font-size: 0.72rem; color: var(--text-dim);">Presets:</span>
                 </div>
                 <div class="input-wrapper">
@@ -1254,15 +1190,13 @@
                     🌧️ Monsoon / Rice (200 mm)
                   </button>
                 </div>
-                <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.4rem; line-height: 1.4;">
-                  <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> <strong>Agronomic Guide:</strong> The ML model evaluates <em>seasonal crop water requirement</em>. Today's live rain reading (0.0 mm) shows today's dry weather. For normal field crops, provide seasonal water (75–200 mm).
-                </div>
               </div>
 
               <button type="submit" class="btn-submit" id="submitBtn">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span>Run Precision Agronomic Recommendation</span>
+                <span>Recommend Best Crop & Predict Yield</span>
               </button>
+
             </div>
           </div>
 
@@ -1427,11 +1361,11 @@
           <!-- Initial State Placeholder -->
           <div class="empty-state-card" id="initialEmptyCard">
             <div class="empty-state-icon">
-              <i class="fa-solid fa-satellite-dish"></i>
+              <i class="fa-solid fa-seedling"></i>
             </div>
-            <div class="empty-state-title">Precision Agronomic Intelligence Ready</div>
+            <div class="empty-state-title">Ready for Recommendation</div>
             <div class="empty-state-desc">
-              Select your Indian State & District and enter your Soil Health Card test values or click "Fill District Soil Benchmark" to generate calibrated recommendations.
+              Select your State & District and enter your soil values (or click "Fill District Baseline") to view the AI crop recommendation, expected yield, and ICAR fertilizer advisory.
             </div>
           </div>
 
@@ -1447,7 +1381,7 @@
   </div>
 
   <footer>
-    AgriSense AI™ Enterprise Agronomy System • 81,329 Ministry of Agriculture Records • 100% Real Authentic Data
+    AgriSense AI™ • Precision Agriculture & Regional Crop Intelligence System
   </footer>
 
   <!-- Script for Radar Chart when rendered via Jinja -->
