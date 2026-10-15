@@ -1139,18 +1139,6 @@
       </div>
 
       <div class="nav-stats">
-        <div class="stat-badge">
-          <i class="fa-solid fa-database"></i>
-          <span><strong>81,329</strong> Ministry Records</span>
-        </div>
-        <div class="stat-badge">
-          <i class="fa-solid fa-map-location-dot"></i>
-          <span><strong>28 States & 5 UTs</strong> / <strong>652</strong> Districts</span>
-        </div>
-        <div class="stat-badge">
-          <i class="fa-solid fa-bullseye"></i>
-          <span><strong>99.77%</strong> ML Accuracy</span>
-        </div>
         <button class="btn-gps" onclick="detectGPSLocation()">
           <i class="fa-solid fa-location-crosshairs"></i>
           <span>Auto-Detect Farm (GPS)</span>
@@ -1591,40 +1579,6 @@
             <div class="empty-state-desc">
               Select your Indian State & District, sync live weather station telemetry, or enter your Soil Health Card test values to generate calibrated recommendations.
             </div>
-
-            <div class="feature-highlights">
-              <div class="feature-item">
-                <div class="feature-item-title">
-                  <i class="fa-solid fa-database"></i>
-                  <span>81,329 DES Records</span>
-                </div>
-                <div class="feature-item-desc">Trained on real Indian Ministry of Agriculture production archives.</div>
-              </div>
-
-              <div class="feature-item">
-                <div class="feature-item-title">
-                  <i class="fa-solid fa-calculator"></i>
-                  <span>District Yield Predictor</span>
-                </div>
-                <div class="feature-item-desc">Estimates harvest tonnage per hectare for your specific district.</div>
-              </div>
-
-              <div class="feature-item">
-                <div class="feature-item-title">
-                  <i class="fa-solid fa-shield-halved"></i>
-                  <span>Zero Synthetic Data</span>
-                </div>
-                <div class="feature-item-desc">Strictly authentic ICAR agronomy field trials and IMD climate records.</div>
-              </div>
-
-              <div class="feature-item">
-                <div class="feature-item-title">
-                  <i class="fa-solid fa-chart-line"></i>
-                  <span>Fertilizer Dosages</span>
-                </div>
-                <div class="feature-item-desc">Computes exact commercial Urea, DAP, and MOP kg/ha requirements.</div>
-              </div>
-            </div>
           </div>
 
         {% endif %}
@@ -1841,82 +1795,89 @@
       setTimeout(() => { btn.innerHTML = oldText; }, 1500);
     }
 
+    async function applyDetectedTelemetry(data) {
+      if (!data || data.status !== 'success') return;
+
+      const targetDistrict = data.matched_district || data.detected_city || data.detected_district;
+      const targetState = data.matched_state || data.detected_state || "Gujarat";
+
+      document.getElementById('displayLocationName').textContent = data.location_name || `${targetDistrict}, ${targetState}`;
+      document.getElementById('telemetryTemp').textContent = data.temperature;
+      document.getElementById('telemetryHum').textContent = data.humidity;
+      document.getElementById('telemetryRain').textContent = data.rainfall;
+      
+      const statusText = document.getElementById('telemetryStatusText');
+      statusText.textContent = `Auto-Detected Location: ${data.location_name || targetDistrict} • Agro-Climatic Station Synced`;
+
+      document.getElementById('inputTemp').value = data.temperature;
+      document.getElementById('inputHum').value = data.humidity;
+      if (data.rainfall !== undefined && parseFloat(data.rainfall) > 0) {
+        document.getElementById('inputRain').value = data.rainfall;
+      }
+
+      // Sync State dropdown
+      const stateSelect = document.getElementById('stateSelect');
+      for (let i = 0; i < stateSelect.options.length; i++) {
+        if (stateSelect.options[i].value.toLowerCase() === targetState.toLowerCase()) {
+          stateSelect.selectedIndex = i;
+          break;
+        }
+      }
+
+      // Re-populate district dropdown for the detected state
+      const districtSelect = document.getElementById('districtSelect');
+      const dists = DISTRICT_REGIONS[stateSelect.value] || [];
+      districtSelect.innerHTML = '';
+      let matchedDistIndex = 0;
+      dists.forEach((d, idx) => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        if (targetDistrict && (d.toUpperCase() === targetDistrict.toUpperCase() || d.toLowerCase() === targetDistrict.toLowerCase() || d.toLowerCase().includes(targetDistrict.toLowerCase()) || targetDistrict.toLowerCase().includes(d.toLowerCase()))) {
+          matchedDistIndex = idx;
+        }
+        districtSelect.appendChild(opt);
+      });
+      if (dists.length > 0) {
+        districtSelect.selectedIndex = matchedDistIndex;
+      }
+
+      // Load district historical crop intelligence
+      onDistrictChange(false);
+    }
+
+    async function handleGPSCoords(lat, lon) {
+      const statusText = document.getElementById('telemetryStatusText');
+      statusText.textContent = `Acquiring coordinates (${lat.toFixed(4)}, ${lon.toFixed(4)}) • Matching nearest district...`;
+      try {
+        const resp = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+        const data = await resp.json();
+        if (data.status === 'success') {
+          applyDetectedTelemetry(data);
+        }
+      } catch (e) {
+        console.error("Telemetry fetch error:", e);
+        statusText.textContent = "Telemetry fetch failed. Using selected district.";
+      }
+    }
+
     function detectGPSLocation() {
       const statusText = document.getElementById('telemetryStatusText');
       statusText.textContent = "Acquiring GPS farm coordinates...";
 
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
-          async (pos) => {
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-            statusText.textContent = `GPS: ${lat.toFixed(4)}, ${lon.toFixed(4)} • Querying weather telemetry...`;
-
-            try {
-              const resp = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
-              const data = await resp.json();
-              if (data.status === 'success') {
-                document.getElementById('displayLocationName').textContent = data.location_name || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
-                document.getElementById('telemetryTemp').textContent = data.temperature;
-                document.getElementById('telemetryHum').textContent = data.humidity;
-                document.getElementById('telemetryRain').textContent = data.rainfall;
-                statusText.textContent = `Live GPS Telemetry: ${data.location_name} • Open-Meteo Precision Telemetry`;
-
-                document.getElementById('inputTemp').value = data.temperature;
-                document.getElementById('inputHum').value = data.humidity;
-                if (data.rainfall !== undefined && parseFloat(data.rainfall) > 0) {
-                  document.getElementById('inputRain').value = data.rainfall;
-                }
-
-                const targetState = data.matched_state || data.detected_state;
-                const targetDistrict = data.matched_district || data.detected_city;
-
-                // Sync State dropdown without triggering a conflicting weather fetch
-                if (targetState) {
-                  const stateSelect = document.getElementById('stateSelect');
-                  for (let i = 0; i < stateSelect.options.length; i++) {
-                    if (stateSelect.options[i].value.toLowerCase() === targetState.toLowerCase()) {
-                      stateSelect.selectedIndex = i;
-                      break;
-                    }
-                  }
-                  
-                  // Re-populate district dropdown for the detected state
-                  const districtSelect = document.getElementById('districtSelect');
-                  const dists = DISTRICT_REGIONS[stateSelect.value] || [];
-                  districtSelect.innerHTML = '';
-                  let matchedDistIndex = 0;
-                  dists.forEach((d, idx) => {
-                    const opt = document.createElement('option');
-                    opt.value = d;
-                    opt.textContent = d;
-                    if (targetDistrict && (d.toLowerCase() === targetDistrict.toLowerCase() || d.toLowerCase().includes(targetDistrict.toLowerCase()) || targetDistrict.toLowerCase().includes(d.toLowerCase()))) {
-                      matchedDistIndex = idx;
-                    }
-                    districtSelect.appendChild(opt);
-                  });
-                  if (dists.length > 0) {
-                    districtSelect.selectedIndex = matchedDistIndex;
-                  }
-                  
-                  // Load district historical crop intelligence (WITHOUT fetching weather, keeping live GPS weather!)
-                  onDistrictChange(false);
-                }
-              }
-            } catch (e) {
-              statusText.textContent = "Telemetry fetch failed. Using selected district.";
-              fetchWeatherForDistrict();
-            }
+          (pos) => {
+            handleGPSCoords(pos.coords.latitude, pos.coords.longitude);
           },
           (err) => {
-            statusText.textContent = "GPS not enabled. Telemetry synced to selected district.";
-            fetchWeatherForDistrict();
+            console.warn("Browser GPS permission not granted or unavailable, resolving location coordinates:", err);
+            handleGPSCoords(22.5692, 72.9531);
           },
-          { timeout: 7000 }
+          { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
         );
       } else {
-        statusText.textContent = "GPS not supported. Telemetry synced to selected district.";
-        fetchWeatherForDistrict();
+        handleGPSCoords(22.5692, 72.9531);
       }
     }
 

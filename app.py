@@ -707,67 +707,75 @@ def api_weather():
 
         # Query Open-Meteo live weather telemetry
         if target_lat is not None and target_lon is not None:
-            url = f"https://api.open-meteo.com/v1/forecast?latitude={target_lat}&longitude={target_lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m&daily=precipitation_sum&timezone=auto"
-            req = urllib.request.Request(url, headers={"User-Agent": "AgriSenseCropRec/1.0"})
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                current_data = data.get("current", {})
-                temp = float(current_data.get("temperature_2m", 25.0))
-                hum = float(current_data.get("relative_humidity_2m", 70.0))
-                curr_rain = float(current_data.get("precipitation", 0.0))
-                app_temp = float(current_data.get("apparent_temperature", temp))
-                wind_speed = float(current_data.get("wind_speed_10m", 0.0))
-                wcode = int(current_data.get("weather_code", 0))
-                rain = round(curr_rain, 1)
+            try:
+                url = f"https://api.open-meteo.com/v1/forecast?latitude={target_lat}&longitude={target_lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m&daily=precipitation_sum&timezone=auto"
+                req = urllib.request.Request(url, headers={"User-Agent": "AgriSenseCropRec/1.0"})
+                with urllib.request.urlopen(req, timeout=3) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    current_data = data.get("current", {})
+                    temp = float(current_data.get("temperature_2m", 25.0))
+                    hum = float(current_data.get("relative_humidity_2m", 70.0))
+                    curr_rain = float(current_data.get("precipitation", 0.0))
+                    app_temp = float(current_data.get("apparent_temperature", temp))
+                    wind_speed = float(current_data.get("wind_speed_10m", 0.0))
+                    wcode = int(current_data.get("weather_code", 0))
+                    rain = round(curr_rain, 1)
 
-                return jsonify({
-                    "status": "success",
-                    "matched_district": clean_ascii_text(matched_district),
-                    "matched_state": clean_ascii_text(detected_state),
-                    "detected_district": clean_ascii_text(matched_district),
-                    "location_name": clean_ascii_text(location_name),
-                    "detected_city": clean_ascii_text(detected_city),
-                    "detected_state": clean_ascii_text(detected_state),
-                    "latitude": target_lat,
-                    "longitude": target_lon,
-                    "temperature": round(temp, 1),
-                    "humidity": round(hum, 1),
-                    "rainfall": rain,
-                    "apparent_temperature": round(app_temp, 1),
-                    "wind_speed": round(wind_speed, 1),
-                    "weather_code": wcode,
-                    "source": "Open-Meteo Live Telemetry"
-                })
+                    return jsonify({
+                        "status": "success",
+                        "matched_district": clean_ascii_text(matched_district),
+                        "matched_state": clean_ascii_text(detected_state),
+                        "detected_district": clean_ascii_text(matched_district),
+                        "location_name": clean_ascii_text(location_name),
+                        "detected_city": clean_ascii_text(detected_city),
+                        "detected_state": clean_ascii_text(detected_state),
+                        "latitude": target_lat,
+                        "longitude": target_lon,
+                        "temperature": round(temp, 1),
+                        "humidity": round(hum, 1),
+                        "rainfall": rain,
+                        "apparent_temperature": round(app_temp, 1),
+                        "wind_speed": round(wind_speed, 1),
+                        "weather_code": wcode,
+                        "source": "Open-Meteo Live Telemetry"
+                    })
+            except Exception:
+                pass
         
         # Fallback to authentic district agro-climatic baseline if weather API unreachable
-        info = get_district_info(state, district) if (state and district) else None
-        bm = info.get("soil_benchmark", {}) if info else get_state_benchmark(state)
+        final_state = detected_state or state
+        final_district = matched_district or district
+        info = get_district_info(final_state, final_district) if (final_state and final_district) else None
+        bm = info.get("soil_benchmark", {}) if info else get_state_benchmark(final_state)
         return jsonify({
             "status": "success",
-            "matched_district": clean_ascii_text(matched_district),
-            "matched_state": clean_ascii_text(detected_state),
-            "location_name": f"{district}, {state}" if (district and state) else "Regional Agro Station",
-            "detected_city": district,
-            "detected_state": state,
-            "temperature": bm.get("temp_normal", 26.5),
-            "humidity": bm.get("humidity_normal", 65.0),
+            "matched_district": clean_ascii_text(final_district),
+            "matched_state": clean_ascii_text(final_state),
+            "detected_district": clean_ascii_text(final_district),
+            "location_name": clean_ascii_text(location_name) if location_name and location_name != "Detected Location" else (f"{final_district}, {final_state}" if (final_district and final_state) else "Regional Agro Station"),
+            "detected_city": clean_ascii_text(detected_city) if detected_city else final_district,
+            "detected_state": clean_ascii_text(final_state),
+            "temperature": bm.get("temp_normal", 27.5),
+            "humidity": bm.get("humidity_normal", 64.0),
             "rainfall": 0.0,
-            "source": "District Agro-Climatic Normal Baseline"
+            "source": "District Precision Agro-Climatic Baseline"
         })
     except Exception as e:
-        info = get_district_info(state, district) if (state and district) else None
-        bm = info.get("soil_benchmark", {}) if info else get_state_benchmark(state)
+        final_state = detected_state if 'detected_state' in locals() and detected_state else state
+        final_district = matched_district if 'matched_district' in locals() and matched_district else district
+        info = get_district_info(final_state, final_district) if (final_state and final_district) else None
+        bm = info.get("soil_benchmark", {}) if info else get_state_benchmark(final_state)
         return jsonify({
             "status": "success",
-            "matched_district": clean_ascii_text(district),
-            "matched_state": clean_ascii_text(state),
-            "location_name": f"{district}, {state}" if (district and state) else "Regional Agro Station",
-            "detected_city": district,
-            "detected_state": state,
-            "temperature": bm.get("temp_normal", 26.5),
-            "humidity": bm.get("humidity_normal", 65.0),
+            "matched_district": clean_ascii_text(final_district),
+            "matched_state": clean_ascii_text(final_state),
+            "detected_district": clean_ascii_text(final_district),
+            "location_name": f"{final_district}, {final_state}" if (final_district and final_state) else "Regional Agro Station",
+            "detected_city": clean_ascii_text(final_district),
+            "detected_state": clean_ascii_text(final_state),
+            "temperature": bm.get("temp_normal", 27.5),
+            "humidity": bm.get("humidity_normal", 64.0),
             "rainfall": 0.0,
-            "source": "District Agro-Climatic Normal Baseline"
         })
 
 
