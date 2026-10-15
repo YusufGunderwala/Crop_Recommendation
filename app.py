@@ -339,7 +339,7 @@ def index():
     states = DISTRICT_INTEL.get("states", [])
     default_state = "Gujarat" if "Gujarat" in states else (states[0] if states else "")
     districts = DISTRICT_INTEL.get("districts_by_state", {}).get(default_state, [])
-    default_district = "ANAND" if "ANAND" in districts else (districts[0] if districts else "")
+    default_district = "AHMADABAD" if "AHMADABAD" in districts else (districts[0] if districts else "")
     
     return render_template(
         "index.html",
